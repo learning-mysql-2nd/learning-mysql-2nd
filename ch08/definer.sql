@@ -1,0 +1,23 @@
+SELECT EVENT_SCHEMA AS obj_schema
+    , EVENT_NAME obj_name
+    , 'EVENT' AS obj_type
+FROM INFORMATION_SCHEMA.EVENTS
+WHERE DEFINER = 'bob@localhost'
+UNION
+SELECT ROUTINE_SCHEMA AS obj_schema
+    , ROUTINE_NAME AS obj_name
+    , ROUTINE_TYPE AS obj_type
+FROM INFORMATION_SCHEMA.ROUTINES
+WHERE DEFINER = 'bob@localhost'
+UNION
+SELECT TRIGGER_SCHEMA AS obj_schema
+    , TRIGGER_NAME AS obj_name
+    , 'TRIGGER' AS obj_type
+FROM INFORMATION_SCHEMA.TRIGGERS
+WHERE DEFINER = 'bob@localhost'
+UNION
+SELECT TABLE_SCHEMA AS obj_scmea
+    , TABLE_NAME AS obj_name
+    , 'VIEW' AS obj_type
+FROM INFORMATION_SCHEMA.VIEWS
+WHERE DEFINER = 'bob@localhost';
