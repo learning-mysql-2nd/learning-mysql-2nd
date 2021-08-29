@@ -8,13 +8,13 @@
 USE sakila;
 
 CREATE TABLE recommend (
-    film_id SMALLINT UNSIGNED
-  , language_id TINYINT UNSIGNED
-  , release_year YEAR
-  , title VARCHAR(128)
-  , length SMALLINT UNSIGNED
-  , sequence_id SMALLINT AUTO_INCREMENT
-  , PRIMARY KEY (sequence_id)
+    film_id SMALLINT UNSIGNED,
+    language_id TINYINT UNSIGNED,
+    release_year YEAR,
+    title VARCHAR(128),
+    length SMALLINT UNSIGNED,
+    sequence_id SMALLINT AUTO_INCREMENT,
+    PRIMARY KEY (sequence_id)
 );
 
 INSERT INTO recommend (film_id, language_id, release_year, title, length)
@@ -27,15 +27,17 @@ SELECT RAND();
 
 SELECT title, RAND() FROM film LIMIT 5;
 
+SELECT title, RAND(1) FROM film LIMIT 5;
+
 CREATE DATABASE art;
 
 USE art;
 
 CREATE TABLE people (
-    person_id SMALLINT UNSIGNED
-  , first_name VARCHAR(45)
-  , last_name VARCHAR(45)
-  , PRIMARY KEY (person_id)
+    person_id SMALLINT UNSIGNED,
+    first_name VARCHAR(45),
+    last_name VARCHAR(45),
+    PRIMARY KEY (person_id)
 );
 
 INSERT INTO art.people (person_id, first_name, last_name)
@@ -74,29 +76,31 @@ CREATE DATABASE nasa;
 USE nasa;
 
 CREATE TABLE facilities (
-    center TEXT
-  , center_search_status TEXT
-  , facility TEXT
-  , facility_url TEXT
-  , occupied TEXT
-  , status TEXT
-  , url_link TEXT
-  , record_date DATETIME
-  , last_update TIMESTAMP
-  , country TEXT
-  , contact TEXT
-  , phone TEXT
-  , location TEXT
-  , city TEXT
-  , state TEXT
-  , zipcode TEXT
+    center TEXT,
+    center_search_status TEXT,
+    facility TEXT,
+    facility_url TEXT,
+    occupied TEXT,
+    status TEXT,
+    url_link TEXT,
+    record_date DATETIME,
+    last_update TIMESTAMP NULL,
+    country TEXT,
+    contact TEXT,
+    phone TEXT,
+    location TEXT,
+    city TEXT,
+    state TEXT,
+    zipcode TEXT
 );
 
-LOAD DATA INFILE 'NASA_Facilities.csv' INTO TABLE facilities FIELDS TERMINATED BY ',';
+LOAD DATA INFILE 'NASA_Facilities.csv' INTO TABLE facilities
+FIELDS TERMINATED BY ',';
 
 SELECT @@secure_file_priv;
 
-LOAD DATA INFILE '/var/lib/mysql-files/NASA_Facilities.csv' INTO TABLE facilities FIELDS TERMINATED BY ',';
+LOAD DATA INFILE '/var/lib/mysql-files/NASA_Facilities.csv'
+INTO TABLE facilities FIELDS TERMINATED BY ',';
 
 LOAD DATA INFILE '/var/lib/mysql-files/NASA_Facilities.csv'
 INTO TABLE facilities FIELDS TERMINATED BY ','
@@ -177,18 +181,21 @@ DESCRIBE actor_2;
 
 SHOW CREATE TABLE actor_2;
 
+DROP TABLE actor_2;
+
 CREATE TABLE actor_2 (UNIQUE(actor_id))
 AS SELECT * from actor;
 
 DESCRIBE actor_2;
 
 CREATE TABLE actor_3 (
-    actor_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT
-  , first_name VARCHAR(45) NOT NULL
-  , last_name VARCHAR(45) NOT NULL
-  , last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-  , PRIMARY KEY (`actor_id`)
-  , KEY `idx_actor_last_name` (`last_name`)
+    actor_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(45) NOT NULL,
+    last_name VARCHAR(45) NOT NULL,
+    last_update TIMESTAMP NOT NULL
+      DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (actor_id),
+    KEY idx_actor_last_name (last_name)
 ) SELECT * FROM actor;
 
 
@@ -275,7 +282,7 @@ WHERE name = 'Horror';
 SELECT COUNT(title)
 FROM film JOIN film_category USING (film_id)
 JOIN category USING (category_id)
-'R';
+WHERE name = 'Horror' AND rating <> 'R';
 
 UPDATE film JOIN film_category USING (film_id)
 JOIN category USING (category_id)
@@ -310,15 +317,16 @@ REPLACE INTO recommend SELECT film_id, language_id,
 release_year, title, length, 7 FROM film
 ORDER BY RAND() LIMIT 1;
 
-INSERT INTO actor (actor_id, first_name, last_name) VALUES (1, 'Penelope', 'Guiness')
+INSERT INTO actor_3 (actor_id, first_name, last_name)
+VALUES (1, 'Penelope', 'Guiness')
 ON DUPLICATE KEY UPDATE first_name = 'Penelope', last_name = 'Guiness';
 
-INSERT INTO actor VALUES (1, 'Penelope', 'Guiness', NOW())
+INSERT INTO actor_3 VALUES (1, 'Penelope', 'Guiness', NOW())
 ON DUPLICATE KEY UPDATE
 actor_id = 1, first_name = 'Penelope',
 last_name = 'Guiness', last_update = NOW();
 
-INSERT INTO actor (actor_id, first_name, last_name) VALUES
+INSERT INTO actor_3 (actor_id, first_name, last_name) VALUES
 (1, 'Penelope', 'Guiness'), (2, 'Nick', 'Wahlberg'),
 (3, 'Ed', 'Chase'), (1001, 'William', 'Dyer')
 ON DUPLICATE KEY UPDATE first_name = VALUES(first_name),
@@ -327,16 +335,18 @@ last_name = VALUES(last_name);
 
 -- Explain
 
-EXPLAIN SELECT * FROM actor WHERE actor_id IN
-(SELECT actor_id FROM film_actor JOIN
-film USING (film_id)
-WHERE title = 'ZHIVAGO CORE');
+EXPLAIN SELECT * FROM actor\G
 
 EXPLAIN SELECT * FROM actor WHERE actor_id IN
 (SELECT actor_id FROM film_actor
 WHERE film_id = 11);
 
 SHOW WARNINGS\G
+
+EXPLAIN SELECT * FROM actor WHERE actor_id IN
+(SELECT actor_id FROM film_actor JOIN
+film USING (film_id)
+WHERE title = 'ZHIVAGO CORE');
 
 EXPLAIN SELECT first_name, last_name FROM actor
 JOIN film_actor USING (actor_id)
@@ -345,13 +355,10 @@ JOIN film_category USING (film_id)
 JOIN category USING (category_id)
 WHERE category.name = 'Horror';
 
-EXPLAIN ANALYZE SELECT first_name, last_name FROM actor
-JOIN film_actor USING (actor_id)
+EXPLAIN ANALYZE SELECT first_name, last_name
+FROM actor JOIN film_actor USING (actor_id)
 JOIN film USING (film_id)
-JOIN film_category USING (film_id)
-JOIN category USING (category_id)
-WHERE category.name = 'Horror'\G
-
+WHERE title = 'ZHIVAGO CORE'\G
 
 -- Alternative Storage Engines
 

@@ -3,22 +3,22 @@ CREATE DATABASE nasa;
 USE nasa;
 
 CREATE TABLE facilities (
-    center TEXT
-  , center_search_status TEXT
-  , facility TEXT
-  , facility_url TEXT
-  , occupied TEXT
-  , status TEXT
-  , url_link TEXT
-  , record_date DATETIME
-  , last_update TIMESTAMP
-  , country TEXT
-  , contact TEXT
-  , phone TEXT
-  , location TEXT
-  , city TEXT
-  , state TEXT
-  , zipcode TEXT
+    center TEXT,
+    center_search_status TEXT,
+    facility TEXT,
+    facility_url TEXT,
+    occupied TEXT,
+    status TEXT,
+    url_link TEXT,
+    record_date DATETIME,
+    last_update TIMESTAMP,
+    country TEXT,
+    contact TEXT,
+    phone TEXT,
+    location TEXT,
+    city TEXT,
+    state TEXT,
+    zipcode TEXT
 );
 
 LOAD DATA INFILE '/var/lib/mysql-files/NASA_Facilities.csv'
