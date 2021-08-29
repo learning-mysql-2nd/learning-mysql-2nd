@@ -1,0 +1,11 @@
+USE sakila
+
+SELECT COUNT(*) FROM film
+WHERE EXISTS (SELECT * FROM rental);
+
+SELECT title FROM film
+WHERE EXISTS (SELECT * FROM film
+WHERE title = 'IS THIS A MOVIE?');
+
+SELECT * FROM actor WHERE NOT EXISTS
+(SELECT * FROM film WHERE title = 'ZHIVAGO CORE');
