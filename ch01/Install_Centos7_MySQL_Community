@@ -12,3 +12,7 @@ mysqld --defaults-file=/etc/my.cnf --user=mysql
 
 # Find MySQL password
 grep "A temporary password" /var/log/mysqld.log
+
+# Enable MySQL service to start on boot
+systemctl enable mysqld
+
