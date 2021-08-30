@@ -1,0 +1,14 @@
+sudo su - root
+
+rpm -Uvh https://repo.mysql.com/mysql80-community-release-el7.rpm
+sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/mysql-community.repo
+yum --enablerepo=mysql80-community install mysql-community-server
+
+#Starting with systemctl
+systemctl start mysqld
+
+#Starting manually
+mysqld --defaults-file=/etc/my.cnf --user=mysql
+
+# Find MySQL password
+grep "A temporary password" /var/log/mysqld.log
