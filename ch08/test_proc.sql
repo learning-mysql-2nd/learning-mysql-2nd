@@ -1,5 +1,5 @@
 DELIMITER ;;
-CREATE DEFINER = `root`@`localhost` PROCEDURE test_proc()
+CREATE DEFINER = 'bob'@'localhost' PROCEDURE test_proc()
 BEGIN
     SELECT CURRENT_USER(), USER();
 END;
