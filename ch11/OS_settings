@@ -1,7 +1,23 @@
+#
+#
 # Swappiness
+#
+#
 
 $ echo 1 > /proc/sys/vm/swappiness
 
 # To persist
 $ sudo sysctl -w vm.swappiness=1
+
+#
+#
+# I/O scheduler
+#
+#
+
+#Check
+$ cat /sys/block/xvda/queue/scheduler
+
+# Change dinamically
+$ echo "noop" > /sys/block/xvda/queue/scheduler
 
