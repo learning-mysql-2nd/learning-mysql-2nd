@@ -1,0 +1,7 @@
+# Swappiness
+
+$ echo 1 > /proc/sys/vm/swappiness
+
+# To persist
+$ sudo sysctl -w vm.swappiness=1
+
